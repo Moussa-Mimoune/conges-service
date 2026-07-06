@@ -1,0 +1,26 @@
+# docker-compose orchestre plusieurs conteneurs ensemble sur un reseau prive
+services:
+
+  db:                                    # le conteneur PostgreSQL
+    image: postgres:16-alpine            # image officielle, pas besoin de Dockerfile
+    environment:
+      POSTGRES_DB: conges                # cree la base "conges" au demarrage
+      POSTGRES_USER: conges              # l'utilisateur
+      POSTGRES_PASSWORD: conges          # le mot de passe
+    ports:
+      - "5433:5432"                      # 5433 sur ta machine -> 5432 dans le conteneur
+        # on utilise 5433 pour ne pas entrer en conflit
+      # avec ton PostgreSQL local sur le port 5432
+
+  backend:                               # le conteneur de ton appli Java
+    build: .                             # construit l'image depuis le Dockerfile du dossier courant
+    environment:
+      DATABASE_URL: jdbc:postgresql://db:5432/conges   # "db" = nom du service ci-dessus (pas une IP)
+      DB_USER: conges
+      DB_PASSWORD: conges
+    ports:
+      - "8081:8080"                      # 8081 sur ta machine -> 8080 dans le conteneur
+        # on utilise 8081 pour ne pas entrer en conflit
+      # avec ton appli qui tourne deja sur 8080
+    depends_on:
+      - db                               # attend que le conteneur db soit lance avant de demarrer
