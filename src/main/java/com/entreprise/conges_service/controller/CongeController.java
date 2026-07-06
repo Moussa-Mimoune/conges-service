@@ -37,4 +37,9 @@ public class CongeController {
         // @PathVariable = recupere {employeId} directement depuis l'URL
         return demandeRepository.findByEmployeId(employeId);
     }
+
+    @GetMapping("/sante")              // GET /api/demandes/sante
+    public Map<String, String> sante() {
+        return Map.of("statut", "ok"); // renvoie {"statut": "ok"}
+    }
 }
