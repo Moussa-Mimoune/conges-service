@@ -15,6 +15,7 @@ services:
   backend:                               # le conteneur de ton appli Java
     build: .                             # construit l'image depuis le Dockerfile du dossier courant
     environment:
+      SPRING_PROFILES_ACTIVE: prod
       DATABASE_URL: jdbc:postgresql://db:5432/conges   # "db" = nom du service ci-dessus (pas une IP)
       DB_USER: conges
       DB_PASSWORD: conges
